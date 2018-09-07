@@ -1,43 +1,33 @@
-package review
+package detailedreviewtype
 
 import (
 	"github.com/fiscaluno/pandorabox/db"
 )
 
-// Review is a Entity
-type Review struct {
-	CourseID      uint    `json:"course_id"`
-	StudentID     uint    `json:"student_id"`
-	InstitutionID uint    `json:"institution_id"`
-	Rate          float64 `json:"rate"`
-	Title         string  `json:"title"`
-	Pros          string  `json:"pros"`
-	Cons          string  `json:"cons"`
-	Suggestion    string  `json:"suggestion"`
+// DetailedReviewType ...
+type DetailedReviewType struct {
+	Name string `json:"name"`
 }
 
 // Entity is a review
 type Entity struct {
-	Review
-	// DetailedReviews []detailedreview.Entity `json:"detailed_reviews" gorm:"ForeignKey:ReviewID"`
+	DetailedReviewType
 	db.CommonModelFields
-}
-
-// TableName for review
-func (Entity) TableName() string {
-	return "review"
 }
 
 // Entities is Entity slice
 type Entities []Entity
 
+// TableName for detailedreviewtype
+func (Entity) TableName() string {
+	return "detailed_review_types"
+}
+
 // GetAll Entities
 func GetAll() Entities {
 	db := db.Conn()
-	// db = db.Set("gorm:auto_preload", true)
 	defer db.Close()
 	var entities Entities
-	// db.Preload("DetailedReviews").Find(&entities)
 	db.Find(&entities)
 	return entities
 }

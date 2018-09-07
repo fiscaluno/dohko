@@ -1,4 +1,4 @@
-package review
+package detailedreview
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/fiscaluno/pandorabox"
 	"github.com/fiscaluno/pandorabox/db"
+
 	"github.com/gorilla/mux"
 )
 

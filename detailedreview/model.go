@@ -1,43 +1,41 @@
-package review
+package detailedreview
 
 import (
+	"github.com/fiscaluno/dohko/detailedreviewtype"
 	"github.com/fiscaluno/pandorabox/db"
 )
 
-// Review is a Entity
-type Review struct {
-	CourseID      uint    `json:"course_id"`
-	StudentID     uint    `json:"student_id"`
-	InstitutionID uint    `json:"institution_id"`
-	Rate          float64 `json:"rate"`
-	Title         string  `json:"title"`
-	Pros          string  `json:"pros"`
-	Cons          string  `json:"cons"`
-	Suggestion    string  `json:"suggestion"`
+// DetailedReview ...
+type DetailedReview struct {
+	CourseID             uint                      `json:"course_id"`
+	StudentID            uint                      `json:"student_id"`
+	InstitutionID        uint                      `json:"institution_id"`
+	ReviewID             uint                      `json:"review_id"`
+	DetailedReviewTypeID uint                      `json:"review_type_id" `
+	Rate                 float64                   `json:"rate"`
+	DetailedReviewType   detailedreviewtype.Entity `json:"review_type" `
 }
 
 // Entity is a review
 type Entity struct {
-	Review
-	// DetailedReviews []detailedreview.Entity `json:"detailed_reviews" gorm:"ForeignKey:ReviewID"`
+	DetailedReview
 	db.CommonModelFields
-}
-
-// TableName for review
-func (Entity) TableName() string {
-	return "review"
 }
 
 // Entities is Entity slice
 type Entities []Entity
 
+// TableName for detailedreview
+func (Entity) TableName() string {
+	return "detailed_reviews"
+}
+
 // GetAll Entities
 func GetAll() Entities {
 	db := db.Conn()
-	// db = db.Set("gorm:auto_preload", true)
+	db = db.Set("gorm:auto_preload", true)
 	defer db.Close()
 	var entities Entities
-	// db.Preload("DetailedReviews").Find(&entities)
 	db.Find(&entities)
 	return entities
 }

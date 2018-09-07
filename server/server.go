@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/fiscaluno/dohko/detailedreview"
+	"github.com/fiscaluno/dohko/detailedreviewtype"
 	"github.com/fiscaluno/dohko/review"
 	"github.com/fiscaluno/pandorabox"
 	"github.com/fiscaluno/pandorabox/logs"
@@ -28,6 +30,8 @@ func Listen() {
 	r.Use(logs.LoggingMiddleware)
 
 	review.SetRoutes(r.PathPrefix("/review").Subrouter())
+	detailedreview.SetRoutes(r.PathPrefix("/detailedreview").Subrouter())
+	detailedreviewtype.SetRoutes(r.PathPrefix("/detailedreviewtype").Subrouter())
 
 	r.HandleFunc("/", handlerHi)
 	http.Handle("/", r)

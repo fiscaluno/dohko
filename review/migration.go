@@ -1,30 +1,41 @@
 package review
 
-import "github.com/fiscaluno/pandorabox/db"
+import (
+	"github.com/fiscaluno/pandorabox/db"
+)
 
 // Migrate migration entity BD
 func Migrate() {
 	db := db.Conn()
+	db = db.Set("gorm:auto_preload", true)
 	defer db.Close()
+
+	db.LogMode(true)
 
 	entity := new(Entity)
 
-	entity.Title = "JC"
-
 	// Migrate the schema
-	db.AutoMigrate(&entity)
+	db.AutoMigrate(entity)
+
+	entity.CourseID = 1
+	entity.StudentID = 1
+	entity.InstitutionID = 1
+	entity.Rate = 5.0
+	entity.Title = "Melhor lugar onde eu poderia estudar"
+	entity.Pros = "Tem professores muito bons, os alunos são de um nivel bem alto, tem varios eventos legais"
+	entity.Cons = "A infraestrutura tem que melhorar um pouco para as algumas aulas fluirem melhor"
+	entity.Suggestion = "Colocarem computadores melhores nos laboratórios"
 
 	// Create
-	db.Create(&Entity{})
+	// db.Create(&entity)
 
+	// db.Preload("DetailedReviews").Find(&entity)
 	// Read
-	// var entity Entity
-	db.First(&entity, 1) // find entity with id 1
-	// db.First(&entity, "name = ?", "JC") // find entity with name JC
+	db.Find(&entity)
 
-	// Update - update entity's Name to SI
-	db.Model(&entity).Update("Title", "SI")
+	// log.Println(entity)
+	// log.Println(entity.DetailedReviews[0].DetailedReviewType)
 
 	// Delete - delete entity
-	db.Delete(&entity)
+	// db.Delete(&entity)
 }
