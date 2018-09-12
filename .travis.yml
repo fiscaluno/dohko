@@ -3,7 +3,9 @@ language: go
 go:
     - "1.7"
 
-install: true
+install:
+    - go get -u github.com/kardianos/govendor
+    - govendor sync
 
 notifications:
     email: false
