@@ -1,4 +1,4 @@
-# Dohko ![build status](https://travis-ci.org/fiscaluno/dohko.svg?branch=master)
+# Dohko ![build status](https://travis-ci.org/fiscaluno/dohko.svg?branch=master) ![Heroku](http://heroku-badge.herokuapp.com/?app=fiscaluno-dohko)
 Dohko - Review microservice
 
 
