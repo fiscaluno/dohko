@@ -20,14 +20,14 @@ type Response struct {
 
 // FindAll entitys
 func FindAll(w http.ResponseWriter, r *http.Request) {
-	resp := Response{
-		Status:   http.StatusText(http.StatusOK),
-		Code:     http.StatusOK,
-		Messages: nil,
-		Result:   GetAll(),
-	}
-	// entitys := GetAll()
-	pandorabox.RespondWithJSON(w, http.StatusOK, resp)
+	// resp := Response{
+	// 	Status:   http.StatusText(http.StatusOK),
+	// 	Code:     http.StatusOK,
+	// 	Messages: nil,
+	// 	Result:   GetAll(),
+	// }
+	entitys := GetAll()
+	pandorabox.RespondWithJSON(w, http.StatusOK, entitys)
 }
 
 // FindByID find a entity by ID
@@ -183,28 +183,6 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
-		Status:  "ERROR",
-		Body:    nil,
-	}
-	pandorabox.RespondWithJSON(w, http.StatusOK, msg)
-
-}
-
-// FindByFacebookID find a entity by FacebookID
-func FindByFacebookID(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-
-	FacebookID := vars["id"]
-	entitys := GetByQuery("facebook_id = ?", FacebookID)
-
-	if len(entitys) >= 0 {
-		pandorabox.RespondWithJSON(w, http.StatusOK, entitys)
-		return
-	}
-
-	msg := pandorabox.Message{
 		Content: "Not exist this Course",
 		Status:  "ERROR",
 		Body:    nil,

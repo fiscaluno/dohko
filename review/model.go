@@ -20,25 +20,25 @@ type Review struct {
 	CreatedAt     time.Time  `json:"created_at"`
 	UpdatedAt     time.Time  `json:"updated_at"`
 	DeletedAt     *time.Time `json:"deleted_at"`
-	CourseInfo    Course     `json:"course_info"`
+	// CourseInfo    Course     `json:"course_info"`
 }
 
 // Course ...
-type Course struct {
-	ID                  uint   `json:"course_id"`
-	Type                string `json:"course_type"`
-	Period              string `json:"period"`
-	Semester            int    `json:"semester"`
-	Name                string `json:"course_name"`
-	MonthlyPaymentValue int    `json:"monthly_payment_value"`
-}
+// type Course struct {
+// 	ID                  uint   `json:"course_id"`
+// 	Type                string `json:"course_type"`
+// 	Period              string `json:"period"`
+// 	Semester            int    `json:"semester"`
+// 	Name                string `json:"course_name"`
+// 	MonthlyPaymentValue int    `json:"monthly_payment_value"`
+// }
 
 // TableName for review
 func (Review) TableName() string {
 	return "review"
 }
 
-// GetAll []Review
+// GetAll Review
 func GetAll() []Review {
 	db := db.Conn()
 	// db = db.Set("gorm:auto_preload", true)
