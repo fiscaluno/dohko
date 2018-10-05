@@ -29,15 +29,15 @@ func Listen() {
 	r := mux.NewRouter()
 	r.Use(logs.LoggingMiddleware)
 
-	review.SetRoutes(r.PathPrefix("/review").Subrouter())
-	detailedreview.SetRoutes(r.PathPrefix("/detailedreview").Subrouter())
-	detailedreviewtype.SetRoutes(r.PathPrefix("/detailedreviewtype").Subrouter())
+	review.SetRoutes(r.PathPrefix("/reviews").Subrouter())
+	detailedreview.SetRoutes(r.PathPrefix("/detailedreviews").Subrouter())
+	detailedreviewtype.SetRoutes(r.PathPrefix("/detailedreviewtypes").Subrouter())
 
 	r.HandleFunc("/", handlerHi)
 	http.Handle("/", r)
 
 	originsOk := handlers.AllowedOrigins([]string{"*"})
-	headersOk := handlers.AllowedHeaders([]string{"X-Client-ID", "Content-Type", "X-Requested-With"})
+	headersOk := handlers.AllowedHeaders([]string{"X-Client-ID", "X-User-Token", "Content-Type", "X-Requested-With"})
 	methodsOk := handlers.AllowedMethods([]string{"OPTIONS", "DELETE", "GET", "HEAD", "POST", "PUT"})
 
 	log.Println("Listen on port: " + port)
