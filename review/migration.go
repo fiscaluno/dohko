@@ -4,7 +4,7 @@ import (
 	"github.com/fiscaluno/pandorabox/db"
 )
 
-// Migrate migration entity BD
+// Migrate migration review BD
 func Migrate() {
 	db := db.Conn()
 	db = db.Set("gorm:auto_preload", true)
@@ -12,26 +12,36 @@ func Migrate() {
 
 	db.LogMode(true)
 
-	entity := new(Entity)
+	review := new(Review)
 
 	// Migrate the schema
-	db.AutoMigrate(entity)
+	db.AutoMigrate(review)
 
-	entity.CourseID = 1
-	entity.StudentID = 1
-	entity.InstitutionID = 1
-	entity.Rate = 5.0
-	entity.Title = "Melhor lugar onde eu poderia estudar"
-	entity.Pros = "Tem professores muito bons, os alunos são de um nivel bem alto, tem varios eventos legais"
-	entity.Cons = "A infraestrutura tem que melhorar um pouco para as algumas aulas fluirem melhor"
-	entity.Suggestion = "Colocarem computadores melhores nos laboratórios"
+	review.StudentID = 1
+	review.InstitutionID = 1
+	review.Rate = 5.0
+	review.Title = "Melhor lugar onde eu poderia estudar"
+	review.Pros = "Tem professores muito bons, os alunos são de um nivel bem alto, tem varios eventos legais"
+	review.Cons = "A infraestrutura tem que melhorar um pouco para as algumas aulas fluirem melhor"
+	review.Suggestion = "Colocarem computadores melhores nos laboratórios"
+
+	review.CourseID = 1
+
+	review.CourseInfo = Course{
+		ID:                  1,
+		Name:                "Information Systems",
+		Type:                "Bachelor",
+		Period:              "nightly",
+		Semester:            8,
+		MonthlyPaymentValue: 1000,
+	}
 
 	// Create
-	// db.Create(&entity)
+	db.Create(&review)
 
-	// db.Preload("DetailedReviews").Find(&entity)
+	// db.Preload("DetailedReviews").Find(&review)
 	// Read
-	db.Find(&entity)
+	// db.Find(&review)
 
 	// log.Println(entity)
 	// log.Println(entity.DetailedReviews[0].DetailedReviewType)

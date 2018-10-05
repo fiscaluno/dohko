@@ -10,10 +10,24 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Response ...
+type Response struct {
+	Status   string   `json:"status"`
+	Code     int      `json:"code"`
+	Messages []string `json:"messages"`
+	Result   []Review `json:"result"`
+}
+
 // FindAll entitys
 func FindAll(w http.ResponseWriter, r *http.Request) {
-	entitys := GetAll()
-	pandorabox.RespondWithJSON(w, http.StatusOK, entitys)
+	resp := Response{
+		Status:   http.StatusText(http.StatusOK),
+		Code:     http.StatusOK,
+		Messages: nil,
+		Result:   GetAll(),
+	}
+	// entitys := GetAll()
+	pandorabox.RespondWithJSON(w, http.StatusOK, resp)
 }
 
 // FindByID find a entity by ID
@@ -55,7 +69,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity Review
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -85,7 +99,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity Review
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -128,7 +142,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity Review
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
