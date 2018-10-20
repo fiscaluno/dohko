@@ -6,26 +6,25 @@ import (
 
 // Review is a Entity
 type Review struct {
-	CourseID        int             `json:"course_id"`
-	StudentID       int             `json:"student_id"`
-	InstitutionID   int             `json:"institution_id"`
-	Rate            float64         `json:"rate"`
-	Title           string          `json:"title"`
-	Pros            string          `json:"pros"`
-	Cons            string          `json:"cons"`
-	Suggestion      string          `json:"suggestion"`
-	DetailedReviews DetailedReviews `json:"detailed_reviews"`
+	CourseID        int              `json:"course_id"`
+	StudentID       int              `json:"student_id"`
+	InstitutionID   int              `json:"institution_id"`
+	Rate            float64          `json:"rate"`
+	Title           string           `json:"title"`
+	Pros            string           `json:"pros"`
+	Cons            string           `json:"cons"`
+	Suggestion      string           `json:"suggestion"`
+	DetailedReviews []DetailedReview `json:"detailed_reviews" gorm:"foreignkey:ReviewID ;association_foreignkey:ID " `
+	db.CommonModelFields
 }
 
 // DetailedReview ...
 type DetailedReview struct {
-	CourseID       int     `json:"course_id"`
-	StudentID      int     `json:"student_id"`
-	InstitutionID  int     `json:"institution_id"`
-	ReviewID       int     `json:"review_id"`
+	ReviewID       int     `json:"review_id" `
 	ReviewType     int     `json:"review_type"`
 	NameReviewType string  `json:"name_review_type"`
 	Rate           float64 `json:"rate"`
+	db.CommonModelFields
 }
 
 // DetailedReviewType ...
@@ -35,7 +34,7 @@ type DetailedReviewType struct {
 }
 
 // DetailedReviews ...
-type DetailedReviews []DetailedReview
+// type DetailedReviews []DetailedReview
 
 // Entity is a review
 type Entity struct {

@@ -1,30 +1,48 @@
 package review
 
-import "github.com/fiscaluno/pandorabox/db"
+import (
+	"fmt"
+
+	"github.com/fiscaluno/pandorabox/db"
+)
 
 // Migrate migration entity BD
 func Migrate() {
 	db := db.Conn()
 	defer db.Close()
 
-	entity := new(Entity)
+	db.LogMode(true)
 
-	entity.Title = "JC"
+	entity := new(Review)
+	detailedReview := new(DetailedReview)
 
 	// Migrate the schema
-	db.AutoMigrate(&entity)
+	db.AutoMigrate(&entity, &detailedReview)
+	entity.Title = "katarina linda"
+	entity.DetailedReviews = []DetailedReview{
+		DetailedReview{
+			ReviewID:       1,
+			NameReviewType: "jc",
+			Rate:           6.7,
+		},
+	}
+	db.Model(&entity).Related(&detailedReview)
 
 	// Create
-	db.Create(&Entity{})
+	db.Create(entity)
 
 	// Read
 	// var entity Entity
-	db.First(&entity, 1) // find entity with id 1
+	// db.First(&entity, 1) // find entity with id 1
 	// db.First(&entity, "name = ?", "JC") // find entity with name JC
 
 	// Update - update entity's Name to SI
-	db.Model(&entity).Update("Title", "SI")
+	// db.Model(&entity).Update("Title", "SI")
+
+	db.Model(&entity).Related(&detailedReview)
+
+	fmt.Println(detailedReview)
 
 	// Delete - delete entity
-	db.Delete(&entity)
+	// db.Delete(&entity)
 }
