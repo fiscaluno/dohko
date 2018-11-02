@@ -46,5 +46,5 @@ func Migrate() {
 	// log.Println(entity.DetailedReviews[0].DetailedReviewType)
 
 	// Delete - delete entity
-	db.Delete(&review)
+	// db.Delete(&review)
 }
