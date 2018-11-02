@@ -1,62 +1,56 @@
 package review
 
 import (
+	"time"
+
 	"github.com/fiscaluno/pandorabox/db"
 )
 
 // Review is a Entity
 type Review struct {
-	CourseID        int             `json:"course_id"`
-	StudentID       int             `json:"student_id"`
-	InstitutionID   int             `json:"institution_id"`
-	Rate            float64         `json:"rate"`
-	Title           string          `json:"title"`
-	Pros            string          `json:"pros"`
-	Cons            string          `json:"cons"`
-	Suggestion      string          `json:"suggestion"`
-	DetailedReviews DetailedReviews `json:"detailed_reviews"`
+	ID            uint       `gorm:"primary_key" json:"id"`
+	StudentID     uint       `json:"student_id"`
+	InstitutionID uint       `json:"institution_id"`
+	CourseID      uint       `json:"course_id"`
+	Rate          float64    `json:"rate"`
+	Title         string     `json:"title"`
+	Pros          string     `json:"pros"`
+	Cons          string     `json:"cons"`
+	Suggestion    string     `json:"suggestion"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	DeletedAt     *time.Time `json:"deleted_at"`
+	// CourseInfo    Course     `json:"course_info"`
 }
 
-// DetailedReview ...
-type DetailedReview struct {
-	CourseID       int     `json:"course_id"`
-	StudentID      int     `json:"student_id"`
-	InstitutionID  int     `json:"institution_id"`
-	ReviewID       int     `json:"review_id"`
-	ReviewType     int     `json:"review_type"`
-	NameReviewType string  `json:"name_review_type"`
-	Rate           float64 `json:"rate"`
+// Course ...
+// type Course struct {
+// 	ID                  uint   `json:"course_id"`
+// 	Type                string `json:"course_type"`
+// 	Period              string `json:"period"`
+// 	Semester            int    `json:"semester"`
+// 	Name                string `json:"course_name"`
+// 	MonthlyPaymentValue int    `json:"monthly_payment_value"`
+// }
+
+// TableName for review
+func (Review) TableName() string {
+	return "review"
 }
 
-// DetailedReviewType ...
-type DetailedReviewType struct {
-	Name string `json:"name"`
-	db.CommonModelFields
-}
-
-// DetailedReviews ...
-type DetailedReviews []DetailedReview
-
-// Entity is a review
-type Entity struct {
-	Review
-	db.CommonModelFields
-}
-
-// Entitys is Entity slice
-type Entitys []Entity
-
-// GetAll Entitys
-func GetAll() Entitys {
+// GetAll Review
+func GetAll() []Review {
 	db := db.Conn()
+	// db = db.Set("gorm:auto_preload", true)
 	defer db.Close()
-	var entitys Entitys
-	db.Find(&entitys)
-	return entitys
+	var entities []Review
+	// db.Preload("DetailedReviews").Find(&entities)
+	db.Find(&entities)
+	return entities
 }
 
-// Save a Entity
-func (entity Entity) Save() (Entity, error) {
+// Save a Review
+func (entity Review) Save() (Review, error) {
 	db := db.Conn()
 	defer db.Close()
 
@@ -65,25 +59,25 @@ func (entity Entity) Save() (Entity, error) {
 	return entity, nil
 }
 
-// GetByID a Entity
-func GetByID(id int) Entity {
+// GetByID a Review
+func GetByID(id int) Review {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity Review
 
 	db.Find(&entity, id)
 
 	return entity
 }
 
-// GetByQuery a Entity
-func GetByQuery(query string, value interface{}) Entitys {
+// GetByQuery a Review
+func GetByQuery(query string, value interface{}) []Review {
 	db := db.Conn()
 	defer db.Close()
 
-	var entitys Entitys
+	var entities []Review
 
-	db.Find(&entitys, query, value)
-	return entitys
+	db.Find(&entities, query, value)
+	return entities
 }

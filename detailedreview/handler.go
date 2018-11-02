@@ -1,4 +1,4 @@
-package review
+package detailedreview
 
 import (
 	"encoding/json"
@@ -7,25 +7,12 @@ import (
 
 	"github.com/fiscaluno/pandorabox"
 	"github.com/fiscaluno/pandorabox/db"
+
 	"github.com/gorilla/mux"
 )
 
-// Response ...
-type Response struct {
-	Status   string   `json:"status"`
-	Code     int      `json:"code"`
-	Messages []string `json:"messages"`
-	Result   []Review `json:"result"`
-}
-
 // FindAll entitys
 func FindAll(w http.ResponseWriter, r *http.Request) {
-	// resp := Response{
-	// 	Status:   http.StatusText(http.StatusOK),
-	// 	Code:     http.StatusOK,
-	// 	Messages: nil,
-	// 	Result:   GetAll(),
-	// }
 	entitys := GetAll()
 	pandorabox.RespondWithJSON(w, http.StatusOK, entitys)
 }
@@ -69,7 +56,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Review
+	var entity Entity
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -99,7 +86,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Review
+	var entity Entity
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -142,7 +129,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Review
+	var entity Entity
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -183,6 +170,28 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
+		Content: "Not exist this Course",
+		Status:  "ERROR",
+		Body:    nil,
+	}
+	pandorabox.RespondWithJSON(w, http.StatusOK, msg)
+
+}
+
+// FindByFacebookID find a entity by FacebookID
+func FindByFacebookID(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	FacebookID := vars["id"]
+	entitys := GetByQuery("facebook_id = ?", FacebookID)
+
+	if len(entitys) >= 0 {
+		pandorabox.RespondWithJSON(w, http.StatusOK, entitys)
+		return
+	}
+
+	msg := pandorabox.Message{
 		Content: "Not exist this Course",
 		Status:  "ERROR",
 		Body:    nil,
