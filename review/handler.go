@@ -18,6 +18,13 @@ type Response struct {
 	Result   []Review `json:"result"`
 }
 
+func TestAverage(w http.ResponseWriter, r *http.Request) {
+	var institution_id uint = 1
+	average := GetAverageByInstitution(institution_id)
+
+	pandorabox.RespondWithJSON(w, http.StatusOK, average)
+}
+
 // FindAll entitys
 func FindAll(w http.ResponseWriter, r *http.Request) {
 	// resp := Response{

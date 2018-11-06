@@ -81,3 +81,19 @@ func GetByQuery(query string, value interface{}) []Review {
 	db.Find(&entities, query, value)
 	return entities
 }
+
+func GetAverageByInstitution(institution_id uint) float64 {
+	db := db.Conn()
+	defer db.Close()
+
+	var reviews []Review
+
+	db.Where(&Review{InstitutionID: institution_id}).Find(&reviews)
+
+	sum := 0.0
+	for i, _ := range reviews {
+		sum = sum + reviews[i].Rate
+	}
+
+	return sum / float64(len(reviews))
+}
