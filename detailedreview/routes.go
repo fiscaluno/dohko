@@ -8,7 +8,8 @@ import (
 func SetRoutes(r *mux.Router) {
 	r.HandleFunc("", Add).Methods("POST")
 	r.HandleFunc("", FindAll).Methods("GET")
-	r.HandleFunc("/{id}", FindByID).Methods("GET")
-	r.HandleFunc("/{id}", DeleteByID).Methods("DELETE")
-	r.HandleFunc("/{id}", UpdateByID).Methods("PUT")
+	r.HandleFunc("/{id:[0-9]+}", FindByID).Methods("GET")
+	r.HandleFunc("/{id:[0-9]+}", DeleteByID).Methods("DELETE")
+	r.HandleFunc("/{id:[0-9]+}", UpdateByID).Methods("PUT")
+	r.HandleFunc("/average", GetDetailedReviewsAverage).Methods("GET")
 }

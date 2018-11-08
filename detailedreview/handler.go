@@ -1,12 +1,14 @@
 package detailedreview
 
 import (
+	"log"
 	"encoding/json"
 	"net/http"
 	"strconv"
 
 	"github.com/fiscaluno/pandorabox"
 	"github.com/fiscaluno/pandorabox/db"
+	"github.com/fiscaluno/dohko/detailedreviewtype"
 
 	"github.com/gorilla/mux"
 )
@@ -176,6 +178,44 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	}
 	pandorabox.RespondWithJSON(w, http.StatusOK, msg)
 
+}
+
+func GetDetailedReviewsAverage(w http.ResponseWriter, r *http.Request) {
+
+	vars := r.URL.Query()
+	institutionId, err := strconv.Atoi(vars["institution_id"][0])
+
+	if err != nil {
+		msg := pandorabox.Message {
+			Content: "Institution id must be defined",
+			Status: "ERROR",
+			Body: nil,
+		}
+		pandorabox.RespondWithJSON(w, http.StatusBadRequest, msg)
+		return
+	}
+
+	allInstitutionDetailedReviews := GetByQuery("institution_id = ?", institutionId)
+
+	mappedReviews := make(map[string] float64)
+	reviewCount := make(map[string] int)
+
+	for index, _ := range allInstitutionDetailedReviews {
+		detailedReview := allInstitutionDetailedReviews[index]
+		detailedReviewType := detailedreviewtype.GetByID(int(detailedReview.DetailedReviewTypeID))
+		mappedReviews[detailedReviewType.Name] += detailedReview.Rate / reviewCount[detailedReviewType.Name]
+		reviewCount[detailedReviewType.Name] += 1
+	}
+
+	msg := pandorabox.Message {
+		Content: "",
+		Status: "OK",
+		Body: mappedReviews,
+	}
+
+	log.Println(mappedReviews)
+
+	pandorabox.RespondWithJSON(w, http.StatusAccepted, msg)
 }
 
 // FindByFacebookID find a entity by FacebookID
