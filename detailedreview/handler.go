@@ -1,7 +1,6 @@
 package detailedreview
 
 import (
-	"log"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -183,37 +182,41 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 func GetDetailedReviewsAverage(w http.ResponseWriter, r *http.Request) {
 
 	vars := r.URL.Query()
-	institutionId, err := strconv.Atoi(vars["institution_id"][0])
-
-	if err != nil {
-		msg := pandorabox.Message {
-			Content: "Institution id must be defined",
-			Status: "ERROR",
-			Body: nil,
-		}
-		pandorabox.RespondWithJSON(w, http.StatusBadRequest, msg)
-		return
-	}
+	institutionId, _ := strconv.Atoi(vars["institution_id"][0])
 
 	allInstitutionDetailedReviews := GetByQuery("institution_id = ?", institutionId)
 
 	mappedReviews := make(map[string] float64)
-	reviewCount := make(map[string] int)
+	reviewCount := make(map[string] float64)
 
 	for index, _ := range allInstitutionDetailedReviews {
 		detailedReview := allInstitutionDetailedReviews[index]
 		detailedReviewType := detailedreviewtype.GetByID(int(detailedReview.DetailedReviewTypeID))
-		mappedReviews[detailedReviewType.Name] += detailedReview.Rate / reviewCount[detailedReviewType.Name]
-		reviewCount[detailedReviewType.Name] += 1
+
+		reviewCount[detailedReviewType.Name] += float64(1)
+		mappedReviews[detailedReviewType.Name] += detailedReview.Rate
+	}
+
+	type ReviewType struct {
+		Type string
+		Rate float64
+	}
+
+	var response []ReviewType
+	for index, _ := range mappedReviews {
+		reviewType := ReviewType {
+			Type: index,
+			Rate: mappedReviews[index] / reviewCount[index],
+		}
+
+		response = append(response, reviewType)
 	}
 
 	msg := pandorabox.Message {
 		Content: "",
 		Status: "OK",
-		Body: mappedReviews,
+		Body: response,
 	}
-
-	log.Println(mappedReviews)
 
 	pandorabox.RespondWithJSON(w, http.StatusAccepted, msg)
 }
