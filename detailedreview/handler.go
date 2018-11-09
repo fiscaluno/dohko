@@ -198,14 +198,14 @@ func GetDetailedReviewsAverage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type ReviewType struct {
-		Type string
-		Rate float64
+		Description string  `json:"description"`
+		Rate 		float64 `json:"rate"`
 	}
 
 	var response []ReviewType
 	for index, _ := range mappedReviews {
 		reviewType := ReviewType {
-			Type: index,
+			Description: index,
 			Rate: mappedReviews[index] / reviewCount[index],
 		}
 
