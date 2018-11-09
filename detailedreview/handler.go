@@ -7,6 +7,7 @@ import (
 
 	"github.com/fiscaluno/pandorabox"
 	"github.com/fiscaluno/pandorabox/db"
+	"github.com/fiscaluno/dohko/detailedreviewtype"
 
 	"github.com/gorilla/mux"
 )
@@ -176,6 +177,48 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	}
 	pandorabox.RespondWithJSON(w, http.StatusOK, msg)
 
+}
+
+func GetDetailedReviewsAverage(w http.ResponseWriter, r *http.Request) {
+
+	vars := r.URL.Query()
+	institutionId, _ := strconv.Atoi(vars["institution_id"][0])
+
+	allInstitutionDetailedReviews := GetByQuery("institution_id = ?", institutionId)
+
+	mappedReviews := make(map[string] float64)
+	reviewCount := make(map[string] float64)
+
+	for index, _ := range allInstitutionDetailedReviews {
+		detailedReview := allInstitutionDetailedReviews[index]
+		detailedReviewType := detailedreviewtype.GetByID(int(detailedReview.DetailedReviewTypeID))
+
+		reviewCount[detailedReviewType.Name] += float64(1)
+		mappedReviews[detailedReviewType.Name] += detailedReview.Rate
+	}
+
+	type ReviewType struct {
+		Description string  `json:"description"`
+		Rate 		float64 `json:"rate"`
+	}
+
+	var response []ReviewType
+	for index, _ := range mappedReviews {
+		reviewType := ReviewType {
+			Description: index,
+			Rate: mappedReviews[index] / reviewCount[index],
+		}
+
+		response = append(response, reviewType)
+	}
+
+	msg := pandorabox.Message {
+		Content: "",
+		Status: "OK",
+		Body: response,
+	}
+
+	pandorabox.RespondWithJSON(w, http.StatusAccepted, msg)
 }
 
 // FindByFacebookID find a entity by FacebookID

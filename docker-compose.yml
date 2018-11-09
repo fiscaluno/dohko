@@ -22,6 +22,7 @@ services:
       options:
         max-size: "50m"
         max-file: "10"
+    restart: always
     environment:
       - PORT=5000
       - DB=postgres
