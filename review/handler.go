@@ -20,14 +20,24 @@ type Response struct {
 
 // FindAll entitys
 func FindAll(w http.ResponseWriter, r *http.Request) {
-	// resp := Response{
-	// 	Status:   http.StatusText(http.StatusOK),
-	// 	Code:     http.StatusOK,
-	// 	Messages: nil,
-	// 	Result:   GetAll(),
-	// }
-	entitys := GetAll()
-	pandorabox.RespondWithJSON(w, http.StatusOK, entitys)
+
+	var entities []Review
+
+	course := r.URL.Query().Get("course")
+	institution := r.URL.Query().Get("institution_id")
+
+	switch {
+	case course != "" && institution != "":
+		entities = GetByQuery("institution_id = ? AND course_id = ? ", institution, course)
+	case course != "":
+		entities = GetByQuery("course_id = ? ", course)
+	case institution != "":
+		entities = GetByQuery("institution_id = ? ", institution)
+	default:
+		entities = GetAll()
+	}
+
+	pandorabox.RespondWithJSON(w, http.StatusOK, entities)
 }
 
 // FindByID find a entity by ID

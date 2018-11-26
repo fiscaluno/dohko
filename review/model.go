@@ -72,12 +72,12 @@ func GetByID(id int) Review {
 }
 
 // GetByQuery a Review
-func GetByQuery(query string, value interface{}) []Review {
+func GetByQuery(query string, value ...interface{}) []Review {
 	db := db.Conn()
 	defer db.Close()
 
 	var entities []Review
 
-	db.Find(&entities, query, value)
+	db.Where(query, value...).Find(&entities)
 	return entities
 }
