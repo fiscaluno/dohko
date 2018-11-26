@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/fiscaluno/dohko/detailedreviewtype"
 	"github.com/fiscaluno/pandorabox"
 	"github.com/fiscaluno/pandorabox/db"
-	"github.com/fiscaluno/dohko/detailedreviewtype"
 
 	"github.com/gorilla/mux"
 )
@@ -44,7 +44,7 @@ func FindByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReview",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -57,7 +57,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReview
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -74,7 +74,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	db.Create(&entity)
 
 	msg = pandorabox.Message{
-		Content: "New Course successfully added",
+		Content: "New DetailedReview successfully added",
 		Status:  "OK",
 		Body:    entity,
 	}
@@ -87,7 +87,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReview
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -107,7 +107,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	if entity.ID != 0 {
 		db.Delete(&entity)
 		msg = pandorabox.Message{
-			Content: "Deleted Course successfully",
+			Content: "Deleted DetailedReview successfully",
 			Status:  "OK",
 			Body:    entity,
 		}
@@ -117,7 +117,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReview",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -130,7 +130,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReview
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -162,7 +162,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 		db.Save(&entity)
 
 		msg = pandorabox.Message{
-			Content: "Update Course successfully ",
+			Content: "Update DetailedReview successfully ",
 			Status:  "OK",
 			Body:    entity,
 		}
@@ -171,7 +171,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReview",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -186,8 +186,8 @@ func GetDetailedReviewsAverage(w http.ResponseWriter, r *http.Request) {
 
 	allInstitutionDetailedReviews := GetByQuery("institution_id = ?", institutionId)
 
-	mappedReviews := make(map[string] float64)
-	reviewCount := make(map[string] float64)
+	mappedReviews := make(map[string]float64)
+	reviewCount := make(map[string]float64)
 
 	for index, _ := range allInstitutionDetailedReviews {
 		detailedReview := allInstitutionDetailedReviews[index]
@@ -199,23 +199,23 @@ func GetDetailedReviewsAverage(w http.ResponseWriter, r *http.Request) {
 
 	type ReviewType struct {
 		Description string  `json:"description"`
-		Rate 		float64 `json:"rate"`
+		Rate        float64 `json:"rate"`
 	}
 
 	var response []ReviewType
 	for index, _ := range mappedReviews {
-		reviewType := ReviewType {
+		reviewType := ReviewType{
 			Description: index,
-			Rate: mappedReviews[index] / reviewCount[index],
+			Rate:        mappedReviews[index] / reviewCount[index],
 		}
 
 		response = append(response, reviewType)
 	}
 
-	msg := pandorabox.Message {
+	msg := pandorabox.Message{
 		Content: "",
-		Status: "OK",
-		Body: response,
+		Status:  "OK",
+		Body:    response,
 	}
 
 	pandorabox.RespondWithJSON(w, http.StatusAccepted, msg)
@@ -235,7 +235,7 @@ func FindByFacebookID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg := pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReview",
 		Status:  "ERROR",
 		Body:    nil,
 	}

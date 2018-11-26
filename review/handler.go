@@ -56,7 +56,7 @@ func FindByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this Review",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -86,7 +86,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	db.Create(&entity)
 
 	msg = pandorabox.Message{
-		Content: "New Course successfully added",
+		Content: "New Review successfully added",
 		Status:  "OK",
 		Body:    entity,
 	}
@@ -119,7 +119,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	if entity.ID != 0 {
 		db.Delete(&entity)
 		msg = pandorabox.Message{
-			Content: "Deleted Course successfully",
+			Content: "Deleted Review successfully",
 			Status:  "OK",
 			Body:    entity,
 		}
@@ -129,7 +129,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this Review",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -174,7 +174,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 		db.Save(&entity)
 
 		msg = pandorabox.Message{
-			Content: "Update Course successfully ",
+			Content: "Update Review successfully ",
 			Status:  "OK",
 			Body:    entity,
 		}
@@ -183,7 +183,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this Review",
 		Status:  "ERROR",
 		Body:    nil,
 	}

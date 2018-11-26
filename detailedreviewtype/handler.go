@@ -43,7 +43,7 @@ func FindByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReviewType",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -56,7 +56,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReviewType
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -73,7 +73,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	db.Create(&entity)
 
 	msg = pandorabox.Message{
-		Content: "New Course successfully added",
+		Content: "New DetailedReviewType successfully added",
 		Status:  "OK",
 		Body:    entity,
 	}
@@ -86,7 +86,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReviewType
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -106,7 +106,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	if entity.ID != 0 {
 		db.Delete(&entity)
 		msg = pandorabox.Message{
-			Content: "Deleted Course successfully",
+			Content: "Deleted DetailedReviewType successfully",
 			Status:  "OK",
 			Body:    entity,
 		}
@@ -116,7 +116,7 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReviewType",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -129,7 +129,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReviewType
 	var msg pandorabox.Message
 
 	msg = pandorabox.Message{
@@ -161,7 +161,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 		db.Save(&entity)
 
 		msg = pandorabox.Message{
-			Content: "Update Course successfully ",
+			Content: "Update DetailedReviewType successfully ",
 			Status:  "OK",
 			Body:    entity,
 		}
@@ -170,7 +170,7 @@ func UpdateByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg = pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReviewType",
 		Status:  "ERROR",
 		Body:    nil,
 	}
@@ -192,7 +192,7 @@ func FindByFacebookID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	msg := pandorabox.Message{
-		Content: "Not exist this Course",
+		Content: "Not exist this DetailedReviewType",
 		Status:  "ERROR",
 		Body:    nil,
 	}

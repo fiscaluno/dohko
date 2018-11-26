@@ -1,8 +1,6 @@
 package detailedreview
 
 import (
-	"log"
-
 	"github.com/fiscaluno/pandorabox/db"
 )
 
@@ -14,25 +12,25 @@ func Migrate() {
 
 	// db.LogMode(true)
 
-	entity := new(Entity)
+	// entity := new(Entity)
 
 	// Migrate the schema
-	db.AutoMigrate(&entity)
+	db.AutoMigrate(&DetailedReview{})
 
-	entity.CourseID = 1
-	entity.StudentID = 1
-	entity.InstitutionID = 1
-	entity.ReviewID = 1
-	entity.DetailedReviewTypeID = 1
-	entity.Rate = 5.0
+	// entity.CourseID = 1
+	// entity.StudentID = 1
+	// entity.InstitutionID = 1
+	// entity.ReviewID = 1
+	// entity.DetailedReviewTypeID = 1
+	// entity.Rate = 5.0
 
 	// Create - create entity
-	db.Create(&entity)
+	// db.Create(&entity)
 
 	// Find - find entity
-	db.Find(&entity)
+	// db.Find(&entity)
 
-	log.Println(entity)
+	// log.Println(entity)
 
 	// Delete - delete entity
 	// db.Delete(&entity)

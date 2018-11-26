@@ -1,39 +1,36 @@
 package detailedreviewtype
 
 import (
+	"time"
+
 	"github.com/fiscaluno/pandorabox/db"
 )
 
 // DetailedReviewType ...
 type DetailedReviewType struct {
-	Name string `json:"name"`
+	ID        uint       `gorm:"primary_key" json:"id"`
+	Name      string     `json:"name"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
+	DeletedAt *time.Time `json:"deleted_at"`
 }
-
-// Entity is a review
-type Entity struct {
-	DetailedReviewType
-	db.CommonModelFields
-}
-
-// Entities is Entity slice
-type Entities []Entity
 
 // TableName for detailedreviewtype
-func (Entity) TableName() string {
+func (DetailedReviewType) TableName() string {
 	return "detailed_review_types"
 }
 
-// GetAll Entities
-func GetAll() Entities {
+// GetAll []DetailedReviewType
+func GetAll() []DetailedReviewType {
 	db := db.Conn()
 	defer db.Close()
-	var entities Entities
+	var entities []DetailedReviewType
 	db.Find(&entities)
 	return entities
 }
 
-// Save a Entity
-func (entity Entity) Save() (Entity, error) {
+// Save a DetailedReviewType
+func (entity DetailedReviewType) Save() (DetailedReviewType, error) {
 	db := db.Conn()
 	defer db.Close()
 
@@ -42,24 +39,24 @@ func (entity Entity) Save() (Entity, error) {
 	return entity, nil
 }
 
-// GetByID a Entity
-func GetByID(id int) Entity {
+// GetByID a DetailedReviewType
+func GetByID(id int) DetailedReviewType {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReviewType
 
 	db.Find(&entity, id)
 
 	return entity
 }
 
-// GetByQuery a Entity
-func GetByQuery(query string, value interface{}) Entities {
+// GetByQuery a DetailedReviewType
+func GetByQuery(query string, value interface{}) []DetailedReviewType {
 	db := db.Conn()
 	defer db.Close()
 
-	var entities Entities
+	var entities []DetailedReviewType
 
 	db.Find(&entities, query, value)
 	return entities

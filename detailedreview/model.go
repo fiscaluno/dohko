@@ -1,47 +1,44 @@
 package detailedreview
 
 import (
+	"time"
+
 	"github.com/fiscaluno/dohko/detailedreviewtype"
 	"github.com/fiscaluno/pandorabox/db"
 )
 
 // DetailedReview ...
 type DetailedReview struct {
-	CourseID             uint                      `json:"course_id"`
-	StudentID            uint                      `json:"student_id"`
-	InstitutionID        uint                      `json:"institution_id"`
-	ReviewID             uint                      `json:"review_id"`
-	DetailedReviewTypeID uint                      `json:"review_type_id" `
-	Rate                 float64                   `json:"rate"`
-	DetailedReviewType   detailedreviewtype.Entity `json:"review_type" `
+	ID                   uint                                  `gorm:"primary_key" json:"id"`
+	CourseID             uint                                  `json:"course_id"`
+	StudentID            uint                                  `json:"student_id"`
+	InstitutionID        uint                                  `json:"institution_id"`
+	ReviewID             uint                                  `json:"review_id"`
+	DetailedReviewTypeID uint                                  `json:"review_type_id" `
+	Rate                 float64                               `json:"rate"`
+	DetailedReviewType   detailedreviewtype.DetailedReviewType `json:"review_type" `
+	CreatedAt            time.Time                             `json:"created_at"`
+	UpdatedAt            time.Time                             `json:"updated_at"`
+	DeletedAt            *time.Time                            `json:"deleted_at"`
 }
-
-// Entity is a review
-type Entity struct {
-	DetailedReview
-	db.CommonModelFields
-}
-
-// Entities is Entity slice
-type Entities []Entity
 
 // TableName for detailedreview
-func (Entity) TableName() string {
+func (DetailedReview) TableName() string {
 	return "detailed_reviews"
 }
 
-// GetAll Entities
-func GetAll() Entities {
+// GetAll []DetailedReview
+func GetAll() []DetailedReview {
 	db := db.Conn()
 	db = db.Set("gorm:auto_preload", true)
 	defer db.Close()
-	var entities Entities
+	var entities []DetailedReview
 	db.Find(&entities)
 	return entities
 }
 
-// Save a Entity
-func (entity Entity) Save() (Entity, error) {
+// Save a DetailedReview
+func (entity DetailedReview) Save() (DetailedReview, error) {
 	db := db.Conn()
 	defer db.Close()
 
@@ -50,24 +47,24 @@ func (entity Entity) Save() (Entity, error) {
 	return entity, nil
 }
 
-// GetByID a Entity
-func GetByID(id int) Entity {
+// GetByID a DetailedReview
+func GetByID(id int) DetailedReview {
 	db := db.Conn()
 	defer db.Close()
 
-	var entity Entity
+	var entity DetailedReview
 
 	db.Find(&entity, id)
 
 	return entity
 }
 
-// GetByQuery a Entity
-func GetByQuery(query string, value interface{}) Entities {
+// GetByQuery a DetailedReview
+func GetByQuery(query string, value interface{}) []DetailedReview {
 	db := db.Conn()
 	defer db.Close()
 
-	var entities Entities
+	var entities []DetailedReview
 
 	db.Find(&entities, query, value)
 	return entities
